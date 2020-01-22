@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Labs2
 {
-    class TestLibrary
+    public class TestLibrary
     {
         public static void test()
         {
@@ -23,10 +23,10 @@ namespace Labs2
         }
     }
 
-    class Reader
+    public class Reader
     {
-        private string name;
-        private int code;
+        public string name { get; }
+        public int code { get; }
         protected List<LibraryBook> BookList;
 
         public Reader(string name, int code)
@@ -73,18 +73,18 @@ namespace Labs2
         }
     }
 
-    enum BookType : byte
+    public enum BookType : byte
     {
         Horror = 1,
         Comedy = 2,
         Drama = 3
     }
-    abstract class Book
+    public abstract class Book
     {
         public BookType type;
         public int code { get; set; }
 
-        public Book(BookType type, int nucodember)
+        public Book(BookType type, int code)
         {
             this.type = type;
             this.code = code;
@@ -96,7 +96,7 @@ namespace Labs2
             return 1;
         }
     }
-    class LibraryBook : Book
+    public class LibraryBook : Book
     {
         bool inStack;
         public LibraryBook(BookType type, int code) : base(type, code)
