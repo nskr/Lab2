@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Labs2;
 using System;
+using System.IO;
 
 namespace Labs2_Test
 {
@@ -73,6 +74,28 @@ namespace Labs2_Test
             Reader newReader = new Reader("John", 1302);
             LibraryBook newBook = newReader[0];
         }
+        [TestMethod]
+        public void TestReaderSerialization()
+        {
+            Reader newReader = new Reader("John", 1302);
+            LibraryBook newBook = new LibraryBook(BookType.Drama, 25);
+            newBook.PutToStack();
+            newReader.TakeBook(newBook);
+            newReader.Serialize("file.txt");
+            string res = File.ReadAllText("file.txt");
+            Assert.AreEqual("Drama\n25\n", res);
+        }
 
+        [TestMethod]
+        public void TestReaderDeserialization()
+        {
+            Reader newReader = new Reader("John", 1302);
+            TestReaderSerialization();
+            newReader.Deserialize("file.txt");
+            LibraryBook takenBook = newReader[0];
+            LibraryBook newBook = new LibraryBook(BookType.Drama, 25);
+            Assert.AreEqual(takenBook.code, newBook.code);
+            Assert.AreEqual(takenBook.type, newBook.type);
+        }
     }
 }

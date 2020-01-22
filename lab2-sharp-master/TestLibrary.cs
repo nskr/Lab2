@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Labs2
 {
@@ -20,6 +21,7 @@ namespace Labs2
             Console.WriteLine(newReader.ReturnBook(newBook));
             newReader[0] = newBook;
             newReader[0].PutToStack();
+            newReader.Serialize("1.txt");
         }
     }
 
@@ -73,13 +75,46 @@ namespace Labs2
             }
             return 0;
         }
+
+        public void Serialize(string path)
+        {
+            string data = "";
+            foreach (LibraryBook book in BookList)
+                data += book.type + "\n" + book.code + "\n";
+            File.WriteAllText(path, data);
+        }
+
+        public void Deserialize(string path)
+        {
+            string[] data = File.ReadAllLines("file.txt");
+            BookList.Clear();
+            for (int i = 0; i < data.Length/2; i++)
+            {
+                BookType type = BookType.Unknown;
+                int code = Int32.Parse(data[i * 2 + 1]);
+                switch (data[i * 2])
+                {
+                    case "Horror":
+                        type = BookType.Horror;
+                        break;
+                    case "Comedy":
+                        type = BookType.Comedy;
+                        break;
+                    case "Drama":
+                        type = BookType.Drama;
+                        break;
+                }
+                BookList.Add(new LibraryBook(type, code));
+            }
+        }
     }
 
     public enum BookType : byte
     {
         Horror = 1,
         Comedy = 2,
-        Drama = 3
+        Drama = 3,
+        Unknown = 255
     }
     public abstract class Book
     {
