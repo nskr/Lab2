@@ -40,6 +40,8 @@ namespace Labs2
         {
             get
             {
+                if (index<0 || index>=BookList.Count)
+                    throw new ArgumentOutOfRangeException();
                 return BookList[index];
             }
             set
